@@ -3,16 +3,16 @@
     <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
              :collapse="isCollapse" background-color="#545c64" text-color="white">
       <template v-for="item in menuItems">
-        <el-submenu v-if="item.hasChild" :index="item.id + ''">
+        <el-submenu v-if="item.child.length" :index="item.menuId + ''">
           <template slot="title">
             <i :class="item.icon" v-if="item.icon"></i>
-            <span>{{item.title}}</span>
+            <span>{{item.name}}</span>
           </template>
           <template v-for="subItem in item.child">
-            <el-menu-item :index="subItem.id + ''"><router-link tag="span" :to="subItem.link">{{subItem.title}}</router-link></el-menu-item>
+            <el-menu-item :index="subItem.menuId + ''"><router-link tag="span" to="">{{subItem.name}}</router-link></el-menu-item>
           </template>
         </el-submenu>
-        <el-menu-item v-else :index="item.id + ''"><router-link tag="span" :to="item.link">{{item.title}}</router-link></el-menu-item>
+        <el-menu-item v-else :index="item.menuId + ''"><router-link tag="span" to="">{{item.name}}</router-link></el-menu-item>
       </template>
     </el-menu>
     <!--   展开 -->
@@ -25,6 +25,7 @@
   </div>
 </template>
 <script>
+import {initMenu} from '../api/menu/index'
 const $ = require("jquery");
 export default {
   name: "leftAside",
@@ -33,20 +34,24 @@ export default {
       isCollapse: false,
       flag: true,
       menuItems: [
-        {id: 1, title: "系统选项", icon: "el-icon-setting", link: "", hasChild: true, child: [
-            {id: 100, title: "用户管理", icon: "", link: "", hasChild: false, child: []}
-          ]},
-        {id: 2, title: "操作记录", icon: "", link: "", hasChild: false, child: []},
-        {id: 3, title: "登陆记录", icon: "", link: "", hasChild: false, child: []}
+
       ]
     };
   },
+  created(){
+    this.initMenu();
+  },
   methods: {
+    initMenu(){
+      initMenu().then(res => {
+        this.menuItems = res.data;
+      })
+    },
     handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+
     },
     handleClose(key, keyPath) {
-      console.log(key, keyPath);
+
     },
     setStatus() {
       this.isCollapse = !(this.isCollapse)
