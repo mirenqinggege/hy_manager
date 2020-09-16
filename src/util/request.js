@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {Message, MessageBox} from 'element-ui'
 axios.defaults.headers['Content-Type'] = "application/json;charset=utf-8";
 const service = axios.create({
   baseURL: "/bgData",
@@ -15,7 +16,7 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(res => {
   const code = res.status;
   if (code !== 200) {
-    this.$message({
+    Message({
       type: "error",
       message: res.statusText
     })
@@ -23,6 +24,7 @@ service.interceptors.response.use(res => {
     return res.data;
   }
 },error => {
+  Message.error(error);
   return Promise.reject(error)
 });
 

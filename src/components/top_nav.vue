@@ -2,7 +2,7 @@
 <el-header>
   <div class="wrapper">
     <div class="logo">
-      hy
+      <img style="height: 80%;" src="http://www.jcfd.vip:81/static/hy/logo2.png">
     </div>
     <div class="_divider"></div>
     <div class="nav_wrapper"></div>
@@ -39,6 +39,12 @@ export default {
       .logo{
         width: 200px;
         color: #606266;
+        text-align: center;
+        line-height: 60px;
+
+        img{
+          vertical-align: middle;
+        }
       }
 
       .nav_wrapper{

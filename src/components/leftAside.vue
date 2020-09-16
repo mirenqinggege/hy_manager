@@ -1,19 +1,8 @@
 <template>
   <div class="aside">
     <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
-             :collapse="isCollapse" background-color="#545c64" text-color="white">
-      <template v-for="item in menuItems">
-        <el-submenu v-if="item.child.length" :index="item.menuId + ''">
-          <template slot="title">
-            <i :class="item.icon" v-if="item.icon"></i>
-            <span>{{item.name}}</span>
-          </template>
-          <template v-for="subItem in item.child">
-            <el-menu-item :index="subItem.menuId + ''"><router-link tag="span" to="">{{subItem.name}}</router-link></el-menu-item>
-          </template>
-        </el-submenu>
-        <el-menu-item v-else :index="item.menuId + ''"><router-link tag="span" to="">{{item.name}}</router-link></el-menu-item>
-      </template>
+             :collapse="isCollapse" background-color="#545c64" text-color="white" :router="true">
+      <menu-item v-for="item in menuItems" :key="item.menuId + ''" :menu-item="item"/>
     </el-menu>
     <!--   展开 -->
     <div @mouseover="showNav" @mouseout="hideNav" class="unfold"
@@ -22,13 +11,16 @@
         <i class="el-icon-arrow-left" style="background-color: white;height: calc(100vh - 60px);line-height: calc(100vh - 60px);text-align: center;margin-left:-2px"></i>
       </a>
     </div>
+    <a href="" target="_self"></a>
   </div>
 </template>
 <script>
 import {initMenu} from '../api/menu/index'
+import MenuItem from "./menuItem";
 const $ = require("jquery");
 export default {
   name: "leftAside",
+  components: {MenuItem},
   data() {
     return {
       isCollapse: false,
