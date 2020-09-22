@@ -1,8 +1,8 @@
 import request from "../../util/request"
 
-export function initMenu(){
+export function initMenu(flag){
   return request({
-    url: "menu/init",
+    url: `menu/init/${flag || false}`,
     method: "get"
   });
 }

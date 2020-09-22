@@ -10,22 +10,18 @@ export function ajaxCallback(res, sFn, eFn) {
   if (code === "00000") {
     Message({
       type: "success",
-      message: msg,
-      onClose() {
-        if (sFn) {
-          sFn();
-        }
-      }
+      message: msg
     })
+    if (sFn) {
+      sFn();
+    }
   } else {
     Message({
       type: "error",
-      message: msg,
-      onClose() {
-        if (eFn) {
-          eFn();
-        }
-      }
+      message: msg
     })
+    if (eFn) {
+      eFn();
+    }
   }
 }

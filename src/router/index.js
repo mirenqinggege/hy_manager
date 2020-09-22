@@ -7,13 +7,28 @@ Vue.use(Router)
 export const contentRoutes = [
   {
     path: '/',
-    name: 'HelloWorld',
     component: HelloWorld,
     children: [
       {
         name: "Index",
         path: "index",
         component: (re) => require(['@/components/index'],re)
+      }
+    ]
+  },
+  {
+    path: "/document",
+    component: HelloWorld,
+    children: [
+      {
+        name: "document_list",
+        path: "",
+        component: re => require(['@/views/content/document/document_list'],re)
+      },
+      {
+        name: "document_uploading",
+        path: "uploading",
+        component: re => require(['@/views/content/document/document_uploading'],re)
       }
     ]
   }

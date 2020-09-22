@@ -11,11 +11,11 @@
           <el-col :span="1">&nbsp;</el-col>
           <el-col :span="3">
             <el-form-item>
-              <el-button type="primary" size="mini">
+              <el-button type="primary" size="mini" @click="doSearch">
                 <i class="el-icon-search"></i>
                 搜索
               </el-button>
-              <el-button type="info">
+              <el-button type="info" @click="getMenuTree">
                 <i class="el-icon-refresh"></i>
                 重置
               </el-button>
@@ -32,7 +32,7 @@
         </el-button>
       </div>
       <el-table :data="menus" style="width: 100%" row-key="menuId"
-                :tree-props="treeProps" lazy :load="load">
+                :tree-props="treeProps">
         <el-table-column label="菜单名称" prop="name"/>
         <el-table-column align="center" label="排序" prop="orderNum"/>
         <el-table-column align="center" label="菜单类型" prop="type">
@@ -47,7 +47,7 @@
           </template>
         </el-table-column>
         <el-table-column align="center" label="路由路径" prop="path"/>
-        <el-table-column align="center" label="组件路径" prop="component"/>
+        <el-table-column align="center" label="组件路径" prop="component" :show-overflow-tooltip="true"/>
         <el-table-column align="center" label="菜单状态" prop="status">
           <template slot-scope="scope">
             <span v-if="scope.row.status === '0'">正常</span>
@@ -181,14 +181,25 @@ export default {
       showIcon: false,
       treeProps: {
         children: "child",
-        hasChildren: "hasChildren"
+        hasChildren: "aaa"
       }
     }
   },
   created() {
-    this.getRootMenus();
+    this.getMenuTree();
   },
   methods: {
+    doSearch(){
+      getMenus(this.search).then(res => {
+        this.menus = res.data;
+      })
+    },
+    getMenuTree(){
+      this.search = {};
+      initMenu(true).then(res => {
+        this.menus = res.data;
+      })
+    },
     load(tree, treeNode, resolve) {
       this.getMenuByParentId(tree.menuId, resolve);
     },
@@ -229,9 +240,6 @@ export default {
       getMenuInfo(row.menuId).then(res => {
         this.form = res.data;
         this.editVisible = true;
-        if (!res.data.parentId) {
-          this.form.parentName = "顶级目录";
-        }
       })
     },
     Save() {
@@ -239,7 +247,7 @@ export default {
         if (valid) {
           save(this.form).then(res => {
             ajaxCallback(res, ()=>{
-              this.getRootMenus();
+              this.getMenuTree();
             });
           })
           this.editVisible = false;
@@ -249,10 +257,13 @@ export default {
     remove(row) {
       remove(row.menuId).then(res => {
         ajaxCallback(res,()=>{
-          this.getRootMenus();
+          this.getMenuTree();
         });
       })
     }
+  },
+  mounted() {
+
   }
 }
 </script>
