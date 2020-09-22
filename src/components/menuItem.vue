@@ -7,7 +7,10 @@
     <menu-item v-for="item in menuItem.child" :key="item.menuId + ''" :menu-item="item"/>
   </el-submenu>
   <el-menu-item v-else :index="menuItem.path">
-    <span slot="title" v-html="menuItem.name"></span>
+    <div slot="title">
+      <i :class="menuItem.icon" v-if="menuItem.icon"></i>
+      <span v-html="menuItem.name"></span>
+    </div>
   </el-menu-item>
 </template>
 

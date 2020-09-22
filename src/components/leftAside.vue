@@ -1,7 +1,6 @@
 <template>
   <div class="aside">
-    <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
-             :collapse="isCollapse" background-color="#545c64" text-color="white" :router="true">
+    <el-menu :default-active="active" class="el-menu-vertical-demo" :collapse="isCollapse" background-color="#545c64" text-color="white" :router="true">
       <menu-item v-for="item in menuItems" :key="item.menuId + ''" :menu-item="item"/>
     </el-menu>
     <!--   展开 -->
@@ -25,9 +24,8 @@ export default {
     return {
       isCollapse: false,
       flag: true,
-      menuItems: [
-
-      ]
+      menuItems: [],
+      active: undefined
     };
   },
   created(){
@@ -38,12 +36,6 @@ export default {
       initMenu().then(res => {
         this.menuItems = res.data;
       })
-    },
-    handleOpen(key, keyPath) {
-
-    },
-    handleClose(key, keyPath) {
-
     },
     setStatus() {
       this.isCollapse = !(this.isCollapse)
@@ -59,6 +51,9 @@ export default {
     hideNav() {
       $(".unfold").animate({"opacity": "0"})
     }
+  },
+  mounted() {
+    this.active = this.$route.path;
   }
 }
 </script>

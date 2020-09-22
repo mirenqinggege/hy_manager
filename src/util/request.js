@@ -1,4 +1,6 @@
 import axios from 'axios'
+import Nprogress from "nprogress"
+import "nprogress/nprogress.css"
 import {Message, MessageBox} from 'element-ui'
 axios.defaults.headers['Content-Type'] = "application/json;charset=utf-8";
 const service = axios.create({
@@ -7,6 +9,8 @@ const service = axios.create({
 });
 
 service.interceptors.request.use(config => {
+  Nprogress.start();
+  Nprogress.inc();
   return config
 },error => {
   console.warn(error);
@@ -14,6 +18,7 @@ service.interceptors.request.use(config => {
 });
 
 service.interceptors.response.use(res => {
+  Nprogress.done();
   const code = res.status;
   if (code !== 200) {
     Message({

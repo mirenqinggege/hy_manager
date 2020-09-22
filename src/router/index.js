@@ -4,7 +4,7 @@ import HelloWorld from '@/components/HelloWorld'
 
 Vue.use(Router)
 
-export const routes = [
+export const contentRoutes = [
   {
     path: '/',
     name: 'HelloWorld',
@@ -12,18 +12,8 @@ export const routes = [
     children: [
       {
         name: "Index",
-        path: "",
+        path: "index",
         component: (re) => require(['@/components/index'],re)
-      }
-    ]
-  },{
-    path: "/menu",
-    component: HelloWorld,
-    children: [
-      {
-        name: "SysMenu",
-        path: "",
-        component: (re) => require(['@/views/system/menu/index'],re)
       }
     ]
   }
@@ -32,5 +22,5 @@ export const routes = [
 export default new Router({
   mode: 'history',
   scrollBehavior: () => ({y: 0}),
-  routes: routes
+  routes: contentRoutes
 })

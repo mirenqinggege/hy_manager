@@ -16,7 +16,9 @@
     "less-loader": "5.0.0",
     "element-ui": "^2.13.2",
     "jquery": "^3.5.1",
-    "axios": "^0.20.0"
+    "axios": "^0.20.0",
+    "vuex": "^3.5.1",
+    "nprogress": "^0.2.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
