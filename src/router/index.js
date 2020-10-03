@@ -1,18 +1,18 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import HelloWorld from "../components/HelloWorld";
 
 Vue.use(Router)
 
 export const contentRoutes = [
   {
     path: '/',
-    component: HelloWorld,
+    component: (re) => require(['@/views/login/login'], re),
     children: [
       {
         name: "Index",
         path: "index",
-        component: (re) => require(['@/components/index'],re)
+        component: (re) => require(['@/components/index'], re)
       }
     ]
   },
@@ -23,12 +23,12 @@ export const contentRoutes = [
       {
         name: "document_list",
         path: "",
-        component: re => require(['@/views/content/document/document_list'],re)
+        component: re => require(['@/views/content/document/document_list'], re)
       },
       {
         name: "document_uploading",
         path: "uploading",
-        component: re => require(['@/views/content/document/document_uploading'],re)
+        component: re => require(['@/views/content/document/document_uploading'], re)
       }
     ]
   }

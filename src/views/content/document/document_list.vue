@@ -1,112 +1,115 @@
 <template>
-      <div style="">
-        <!-- 搜索框 -->
-        <el-form :inline="true" :model="document" class="demo-form-inline">
-          <el-form-item>
-            <el-input size="mini" v-model="document.title" placeholder="文章标题"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-select size="mini" v-model="document.type" placeholder="文章类型">
-              <el-option label="JAVA" value="1"></el-option>
-              <el-option label="CSS/JS" value="2"></el-option>
-              <el-option label="HTML" value="3"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" size="mini"><i class="el-icon-search" @click="search"></i>&nbsp;查询</el-button>
-            <el-button type="info" size="mini"><i class="el-icon-refresh-left" @click="search"></i>&nbsp;重置</el-button>
+  <div style="">
+    <!-- 搜索框 -->
+    <el-form :inline="true" :model="document" class="demo-form-inline">
+      <el-form-item>
+        <el-input size="mini" v-model="document.title" placeholder="文章标题"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-select size="mini" v-model="document.type" placeholder="文章类型">
+          <el-option label="JAVA" value="1"></el-option>
+          <el-option label="CSS/JS" value="2"></el-option>
+          <el-option label="HTML" value="3"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" size="mini"><i class="el-icon-search" @click="search"></i>&nbsp;查询</el-button>
+        <el-button type="info" size="mini"><i class="el-icon-refresh-left" @click="search"></i>&nbsp;重置</el-button>
 
-          </el-form-item>
-        </el-form>
-        <!--  按钮  -->
-        <el-row>
-          <el-button type="primary" size="mini" @click="dialogFormVisible=true"><i class="el-icon-plus"></i>&nbsp;新增
-          </el-button>
-        </el-row>
-        <!-- 表格 -->
-        <el-row>
-          <el-table
-            :data="tableData"
-            style="width: 100%;font-size: 12px"
-            tooltip-effect="dark">
-            <el-table-column
-              prop="title"
-              label="文章标题"
-              :show-overflow-tooltip="true"
-              width="400">
-            </el-table-column>
-            <el-table-column
-              prop="creator"
-              label="上传人"
-              fit="true">
-            </el-table-column>
-            <el-table-column
-              prop="date"
-              label="上传时间"
-              :formatter="dateFormat">
-            </el-table-column>
-            <el-table-column
-              prop="type"
-              label="标签"
-              :filters="[{ text: 'JAVA', value: 'JAVA' }, { text: 'CSS/JS', value: 'CSS/JS' }, { text: 'HTML', value: 'HTML' }]"
-              :filter-method="filterTag"
-              filter-placement="bottom-end">
-              <template slot-scope="scope">
-                <el-tag
-                  :type="scope.row.type === 'code' ? 'primary' : 'primary'"
-                  disable-transitions>
-                  {{ scope.row.type === 1 ? "JAVA" : "CSS/JS" }}
-                </el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="checkNum"
-              label="点击次数">
-            </el-table-column>
-            <el-table-column
-              label="操作"
-              align="center">
-              <template slot-scope="scope">
-                <el-button type="text" size="small" @click="look(scope.row)">查看</el-button>
-                <el-button type="text" size="small" @click="edit(scope.row)">编辑</el-button>
-                <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-row>
+      </el-form-item>
+    </el-form>
+    <!--  按钮  -->
+    <el-row>
+      <el-button type="primary" size="mini" @click="addDocument"><i class="el-icon-plus"></i>&nbsp;新增
+      </el-button>
+    </el-row>
+    <!-- 表格 -->
+    <el-row>
+      <el-table
+        :data="tableData"
+        style="width: 100%;font-size: 12px"
+        tooltip-effect="dark">
+        <el-table-column
+          prop="title"
+          label="文章标题"
+          :show-overflow-tooltip="true"
+          width="400">
+        </el-table-column>
+        <el-table-column
+          prop="creator"
+          label="上传人"
+          fit="true">
+        </el-table-column>
+        <el-table-column
+          prop="date"
+          label="上传时间"
+          :formatter="dateFormat">
+        </el-table-column>
+        <el-table-column
+          prop="type"
+          label="标签"
+          :filters="[{ text: 'JAVA', value: 'JAVA' }, { text: 'CSS/JS', value: 'CSS/JS' }, { text: 'HTML', value: 'HTML' }]"
+          :filter-method="filterTag"
+          filter-placement="bottom-end">
+          <template slot-scope="scope">
+            <el-tag
+              :type="scope.row.type === 'code' ? 'primary' : 'primary'"
+              disable-transitions>
+              {{ scope.row.type === 1 ? "JAVA" : "CSS/JS" }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="checkNum"
+          label="点击次数">
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          align="center">
+          <template slot-scope="scope">
+            <el-button type="text" size="small" @click="edit(scope.row)">编辑</el-button>
+            <el-button type="text" size="small" @click="del(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-row>
 
-        <el-dialog width="35%" title="添加文章" :visible.sync="dialogFormVisible">
-          <el-form :model="form" ref="ruleForm" :rules="rules" style="width: 500px">
-            <el-form-item label="文章标题:" :label-width="formLabelWidth" prop="title">
-              <el-input v-model="form.title" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="文章类型:" :label-width="formLabelWidth">
-              <el-radio-group v-model="form.type">
-                <el-radio v-for="(item, i) in articleDict" :label='item.dictValue' :key="i">{{
-                    item.dictLabel
-                  }}
-                </el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button size="small" type="primary" @click="submitForm('ruleForm')">确 定</el-button>
-            <el-button size="small" @click="cancel('ruleForm')">取 消</el-button>
-          </div>
-        </el-dialog>
+    <el-dialog width="35%" :title="title" :visible.sync="dialogFormVisible">
+      <el-form :model="form" ref="ruleForm" :rules="rules" style="width: 500px">
+        <el-form-item label="文章标题:" :label-width="formLabelWidth" prop="title">
+          <el-input v-model="form.title" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="文章类型:" :label-width="formLabelWidth">
+          <el-radio-group v-model="form.type">
+            <el-radio v-for="(item, i) in articleDict" :label='item.dictValue' :key="i">{{
+                item.dictLabel
+              }}
+            </el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="small" type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+        <el-button size="small" @click="cancel('ruleForm')">取 消</el-button>
       </div>
+    </el-dialog>
+  </div>
 </template>
 <script>
 import request from "../../../util/request";
 import {showLoading, hideLoading} from '../../../util/loading';
+import {delDocumentById, getAllDocumentListData, getDocumentDictListData} from "../../../api/document";
 
 export default {
   name: "document_list",
   data() {
     return {
+      u: "",  //文章id
+      documentType: "1",
+      title: "",
       show: false,
       document: {  //搜索框条件
-        title: '',
+        title: '新增文章',
         type: ''
       },
       tableData: undefined,
@@ -129,6 +132,11 @@ export default {
     this.getDocumentDictListData();
   },
   methods: {
+    addDocument() {
+      this.dialogFormVisible = true;
+      this.title = "添加文章";
+      this.documentType = 1;
+    },
     fadeIn() {
       this.show = !this.show;
     },
@@ -136,20 +144,16 @@ export default {
     filterTag(value, row) {
       return row.type === value;
     },
-    look(row) { //查看文章
-      console.log("查看");
-    },
     edit(row) { //编辑文章
-      console.log("编辑");
+      this.title = "编辑文章";
+      this.dialogFormVisible = true;
+      this.form.title = row.title;
+      this.form.type = row.type;
+      this.u = row.id;
+      this.documentType = 2;
     },
     del(row) {  //删除文章
-      request({
-        url: "delDocumentById",
-        method: "PUT",
-        params: {
-          "id": row.id
-        },
-      }).then((res) => {
+      delDocumentById(id).then((res) => {
         if (res.code === "00000") {
           showLoading(); //加载动画
           let self = this;   // 当前this指向的是一个组件
@@ -168,18 +172,17 @@ export default {
     search() { //根据查询条件查询文章
 
     },
-    add() { //添加文章
-
-    },
     submitForm(formName) { //提交表单
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let til = this.form.title;
           let type = this.form.type;
+          let dtype = this.documentType;
+          let u = this.u;
           this.dialogFormVisible = false; //对话框消失
           this.$refs[formName].resetFields(); //重置表单
           //路由跳转
-          this.$router.push({path: '/document/uploading', query: {title: til, type: type}});
+          this.$router.push({path: '/document/uploading', query: {title: til, type: type, documentType: dtype, u: u}});
         } else {
           return false;
         }
@@ -202,10 +205,7 @@ export default {
     },
     getAllDocumentListData() {
       //获取文章列表
-      request({
-        url: 'getAllDocumentData',
-        method: 'GET',
-      }).then((res) => {
+      getAllDocumentListData().then((res) => {
         if (res.code === "00000") {
           this.tableData = res.data;
         }
@@ -213,13 +213,7 @@ export default {
     },
     getDocumentDictListData() {
       //获取文章字典数据
-      request({
-        url: "getDocumentDictData",
-        method: "GET",
-        params: {
-          "type": "article_type"
-        }
-      }).then((res) => {
+      getDocumentDictListData().then((res) => {
         if (res.code === "00000") {
           this.articleDict = res.data;
         }
@@ -238,6 +232,7 @@ export default {
 .slide-fade-enter-active {
   transition: all 1s ease;
 }
+
 .slide-fade-leave-active {
   transition: all 2s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
