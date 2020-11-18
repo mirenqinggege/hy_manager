@@ -5,15 +5,26 @@
         <h3 style="text-align: center">Hy</h3>
         <el-form-item prop="username">
           <el-input v-model="user.username" prefix-icon="el-icon-user-solid" size="medium"
-                    placeholder="账号"></el-input>
+                    placeholder="账号"/>
         </el-form-item>
         <el-form-item prop="password">
           <el-input type="password" v-model="user.password" prefix-icon="el-icon-lock" size="medium "
-                    placeholder="密码"></el-input>
+                    placeholder="密码"/>
         </el-form-item>
         <el-form-item prop="verificationCode">
-          <el-input v-model="user.verificationCode" prefix-icon="el-icon-thumb" size="medium " style="width: 50%"
-                    placeholder="验证码"></el-input>
+          <el-row>
+            <el-col :span="12">
+              <el-input v-model="user.verificationCode" prefix-icon="el-icon-thumb" size="medium"
+                        placeholder="验证码"/>
+            </el-col>
+            <el-col :span="12">
+              <el-image :src="null">
+                <div slot="error">
+                  <i class="el-icon el-icon-error"></i>
+                </div>
+              </el-image>
+            </el-col>
+          </el-row>
         </el-form-item>
         <el-checkbox v-model="checked" size="mini" style="margin-bottom: 15px">记住密码</el-checkbox>
         <el-form-item>
@@ -26,12 +37,13 @@
 
 <script>
 
-import {login} from "../../api/user";
+import {login, getCaptcha} from "@/api/login";
 
 export default {
   name: "logo",
   data() {
     return {
+      captcha: undefined,
       user: {
         username: '',
         password: '',
@@ -47,11 +59,18 @@ export default {
           {required: true, message: '验证码不能为空', trigger: 'blur'}
         ]
       },
-      checked:false,
-      _csrf:"1edd9a4f-9f08-4555-9c7a-841799ec5ae0"
+      checked: false,
+      _csrf: "1edd9a4f-9f08-4555-9c7a-841799ec5ae0"
     }
   },
   methods: {
+    getCaptcha(){
+      getCaptcha().then((res)=> {
+        this.captcha = res.data;
+      }, ()=> {
+
+      })
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {

@@ -1,4 +1,4 @@
-import request from "../../util/request";
+import request from "@/util/request";
 
 export function login(username, password, _csrf){
   return request({
