@@ -17,8 +17,8 @@
               <el-input v-model="user.verificationCode" prefix-icon="el-icon-thumb" size="medium"
                         placeholder="验证码"/>
             </el-col>
-            <el-col :span="12">
-              <el-image :src="null">
+            <el-col :span="12" style="text-align: center;">
+              <el-image :src="captcha" @click="getCaptcha">
                 <div slot="error">
                   <i class="el-icon el-icon-error"></i>
                 </div>
@@ -38,12 +38,14 @@
 <script>
 
 import {login, getCaptcha} from "@/api/login";
+import {ajaxCallback} from "@/util/ajaxResult";
 
 export default {
   name: "logo",
   data() {
     return {
       captcha: undefined,
+      uuid: undefined,
       user: {
         username: '',
         password: '',
@@ -66,7 +68,8 @@ export default {
   methods: {
     getCaptcha(){
       getCaptcha().then((res)=> {
-        this.captcha = res.data;
+        this.captcha = res.data.captcha;
+        this.uuid = res.data.vc;
       }, ()=> {
 
       })
@@ -74,15 +77,20 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          login(this.user.username, this.user.password, this._csrf).then((res) => {
-            console.log(res);
-          })
+          login(this.user.username, this.user.password, this.user.verificationCode, this.uuid).then(res => {
+            ajaxCallback(res, () => {
+              this.$router.push({name: 'index'});
+            });
+          });
         } else {
-          console.log('error submit!!');
+          console.warn('error submit!!');
           return false;
         }
       });
     },
+  },
+  created() {
+    this.getCaptcha();
   }
 }
 </script>
