@@ -3,7 +3,7 @@ const isLoaded = {
     isLoaded: false
   },
   mutations: {
-    SET_IS_LOADED: (state, flag)=>{
+    SET_IS_LOADED: (state, flag) => {
       state.isLoaded = flag;
     }
   },

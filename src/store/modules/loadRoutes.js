@@ -1,6 +1,6 @@
-import {contentRoutes} from "../../router"
-import {getRoutes} from "../../api/menu";
-import HelloWorld from "../../components/HelloWorld";
+import {contentRoutes} from "@/router"
+import {getRoutes} from "@/api/menu";
+import HelloWorld from "@/components/HelloWorld";
 
 
 const loadRoutes = {

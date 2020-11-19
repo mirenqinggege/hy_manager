@@ -45,11 +45,11 @@ export default {
   data() {
     return {
       captcha: undefined,
-      uuid: undefined,
       user: {
-        username: '',
-        password: '',
-        verificationCode: '',
+        username: undefined,
+        password: undefined,
+        verificationCode: undefined,
+        uuid: undefined
       }, rules: {
         username: [
           {required: true, message: '用户名不能为空', trigger: 'blur'},
@@ -66,20 +66,18 @@ export default {
     }
   },
   methods: {
-    getCaptcha(){
-      getCaptcha().then((res)=> {
+    getCaptcha() {
+      getCaptcha().then((res) => {
         this.captcha = res.data.captcha;
-        this.uuid = res.data.vc;
-      }, ()=> {
-
+        this.user.uuid = res.data.vc;
       })
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          login(this.user.username, this.user.password, this.user.verificationCode, this.uuid).then(res => {
+          this.$store.dispatch("doLogin", this.user).then(res => {
             ajaxCallback(res, () => {
-              this.$router.push({name: 'index'});
+              this.$router.push({name: "index"});
             });
           });
         } else {
