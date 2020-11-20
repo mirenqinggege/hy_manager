@@ -77,7 +77,7 @@ export default {
         if (valid) {
           this.$store.dispatch("doLogin", this.user).then(res => {
             ajaxCallback(res, () => {
-              this.$router.push({name: "index"});
+              this.$router.push({name: 'index'});
             });
           });
         } else {

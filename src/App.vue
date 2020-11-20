@@ -6,7 +6,19 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  mounted() {
+    window.addEventListener("unload", this.saveLogin);
+  },
+  methods: {
+    saveLogin(){
+      let loginInfo = {
+        'key': this.$store.getters.key,
+        'token': this.$store.getters.token
+      }
+      sessionStorage.setItem("loginInfo", JSON.stringify(loginInfo));
+    }
+  }
 }
 </script>
 

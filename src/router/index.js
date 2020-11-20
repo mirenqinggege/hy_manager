@@ -6,11 +6,12 @@ Vue.use(Router)
 
 export const contentRoutes = [
   {
-    path: '/',
+    path: '/login',
+    name: 'login',
     component: (re) => require(['@/views/login/login'], re)
   },
   {
-    path: '/index',
+    path: '/',
     component: re => require(['@/components/HelloWorld'],re),
     children: [
       {
